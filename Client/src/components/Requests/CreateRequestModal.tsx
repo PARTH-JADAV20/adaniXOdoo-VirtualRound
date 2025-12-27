@@ -134,8 +134,14 @@ export const CreateRequestModal: React.FC<CreateRequestModalProps> = ({
     }
   };
 
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      onClose();
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-3xl max-h-[95vh] overflow-y-auto">
         <DialogHeader className="pb-4 border-b">
           <DialogTitle className="text-2xl font-bold flex items-center gap-2">
@@ -212,22 +218,19 @@ export const CreateRequestModal: React.FC<CreateRequestModalProps> = ({
                   Equipment <span className="text-destructive">*</span>
                 </Label>
                 <Select
-                  value={equipmentId || ''}
+                  value={equipmentId || undefined}
                   onValueChange={(value) => setValue('equipmentId', value)}
+                  disabled={equipmentList.length === 0}
                 >
                   <SelectTrigger className="h-11">
-                    <SelectValue placeholder="Select equipment" />
+                    <SelectValue placeholder={equipmentList.length === 0 ? "No equipment available" : "Select equipment"} />
                   </SelectTrigger>
                   <SelectContent>
-                    {equipmentList.length === 0 ? (
-                      <SelectItem value="" disabled>No equipment available</SelectItem>
-                    ) : (
-                      equipmentList.map((eq) => (
-                        <SelectItem key={eq.id} value={eq.id}>
-                          {eq.name} - {eq.location}
-                        </SelectItem>
-                      ))
-                    )}
+                    {equipmentList.map((eq) => (
+                      <SelectItem key={eq.id} value={eq.id}>
+                        {eq.name} - {eq.location}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 {errors.equipmentId && (

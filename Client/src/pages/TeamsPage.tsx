@@ -9,11 +9,13 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { toast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/AuthContext';
+import { CreateTeamModal } from '@/components/Teams/CreateTeamModal';
 
 const TeamsPage: React.FC = () => {
   const { user, hasRole } = useAuth();
   const [teams, setTeams] = useState<Team[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   useEffect(() => {
     loadTeams();
@@ -63,7 +65,7 @@ const TeamsPage: React.FC = () => {
           <p className="text-muted-foreground mt-1">View and manage maintenance teams</p>
         </div>
         {hasRole('admin') && (
-          <Button disabled>
+          <Button onClick={() => setIsCreateModalOpen(true)} size="lg" className="shadow-lg">
             <UserPlus className="mr-2 h-4 w-4" />
             Create Team
           </Button>
@@ -155,6 +157,16 @@ const TeamsPage: React.FC = () => {
           ))}
         </div>
       )}
+
+      {/* Modals */}
+      <CreateTeamModal
+        open={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSuccess={() => {
+          loadTeams();
+          setIsCreateModalOpen(false);
+        }}
+      />
     </div>
   );
 };

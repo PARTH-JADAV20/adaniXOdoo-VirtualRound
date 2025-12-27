@@ -165,6 +165,12 @@ export interface CreateEquipmentForm {
   purchaseDate?: string;
 }
 
+export interface CreateTeamForm {
+  name: string;
+  description?: string;
+  leaderId?: string;
+}
+
 // Dashboard Stats
 export interface DashboardStats {
   totalEquipment: number;

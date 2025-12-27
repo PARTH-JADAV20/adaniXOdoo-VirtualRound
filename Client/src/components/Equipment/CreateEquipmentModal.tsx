@@ -108,8 +108,14 @@ export const CreateEquipmentModal: React.FC<CreateEquipmentModalProps> = ({
     }
   };
 
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      onClose();
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-3xl max-h-[95vh] overflow-y-auto">
         <DialogHeader className="pb-4 border-b">
           <DialogTitle className="text-2xl font-bold flex items-center gap-2">
@@ -159,24 +165,24 @@ export const CreateEquipmentModal: React.FC<CreateEquipmentModalProps> = ({
                     Team <span className="text-destructive">*</span>
                   </Label>
                   <Select
-                    value={watch('teamId') || ''}
+                    value={watch('teamId') || undefined}
                     onValueChange={(value) => setValue('teamId', value)}
+                    disabled={teams.length === 0}
                   >
                     <SelectTrigger className="h-11">
-                      <SelectValue placeholder="Select team" />
+                      <SelectValue placeholder={teams.length === 0 ? "No teams available" : "Select team"} />
                     </SelectTrigger>
                     <SelectContent>
-                      {teams.length === 0 ? (
-                        <SelectItem value="" disabled>No teams available</SelectItem>
-                      ) : (
-                        teams.map((team) => (
-                          <SelectItem key={team.id} value={team.id}>
-                            {team.name}
-                          </SelectItem>
-                        ))
-                      )}
+                      {teams.map((team) => (
+                        <SelectItem key={team.id} value={team.id}>
+                          {team.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
+                  {teams.length === 0 && (
+                    <p className="text-xs text-muted-foreground">Teams list is empty. Please create a team first.</p>
+                  )}
                   {errors.teamId && (
                     <p className="text-sm text-destructive flex items-center gap-1">
                       <span>⚠</span> {errors.teamId.message}
@@ -241,7 +247,7 @@ export const CreateEquipmentModal: React.FC<CreateEquipmentModalProps> = ({
             <Button type="button" variant="outline" onClick={onClose} disabled={isLoading} size="lg">
               Cancel
             </Button>
-            <Button type="submit" disabled={isLoading} size="lg" className="shadow-lg">
+            <Button type="submit" disabled={isLoading || teams.length === 0} size="lg" className="shadow-lg">
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

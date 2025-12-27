@@ -14,6 +14,8 @@ import { StatusBadge } from '@/components/common/Badges';
 import { format } from 'date-fns';
 import { AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { CreateScheduleModal } from '@/components/Equipment/CreateScheduleModal';
+import { AssignTeamModal } from '@/components/Equipment/AssignTeamModal';
 
 interface EquipmentDetailsModalProps {
   equipment: Equipment;
@@ -31,6 +33,8 @@ export const EquipmentDetailsModal: React.FC<EquipmentDetailsModalProps> = ({
   const [equipment, setEquipment] = useState(initialEquipment);
   const [maintenanceHistory, setMaintenanceHistory] = useState<MaintenanceRequest[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const [isAssignTeamOpen, setIsAssignTeamOpen] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -74,6 +78,14 @@ export const EquipmentDetailsModal: React.FC<EquipmentDetailsModalProps> = ({
             >
               {equipment.status}
             </Badge>
+          </div>
+          <div className="flex items-center gap-2 mt-3">
+            <Button size="sm" onClick={() => setIsScheduleOpen(true)}>
+              Add Schedule
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => setIsAssignTeamOpen(true)}>
+              Assign Team
+            </Button>
           </div>
         </DialogHeader>
         <div className="space-y-6 mt-6">
@@ -205,6 +217,27 @@ export const EquipmentDetailsModal: React.FC<EquipmentDetailsModalProps> = ({
             </CardContent>
           </Card>
         </div>
+        {isScheduleOpen && (
+          <CreateScheduleModal
+            equipmentId={equipment.id}
+            open={isScheduleOpen}
+            onClose={() => setIsScheduleOpen(false)}
+            onSuccess={() => {
+              loadMaintenanceHistory();
+              onUpdate();
+            }}
+          />
+        )}
+        {isAssignTeamOpen && (
+          <AssignTeamModal
+            equipmentId={equipment.id}
+            open={isAssignTeamOpen}
+            onClose={() => setIsAssignTeamOpen(false)}
+            onSuccess={() => {
+              onUpdate();
+            }}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

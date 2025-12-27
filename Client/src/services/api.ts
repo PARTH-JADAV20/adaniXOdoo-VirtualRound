@@ -8,6 +8,7 @@ import {
   CalendarEvent,
   CreateRequestForm,
   CreateEquipmentForm,
+  CreateTeamForm,
   RequestFilters,
   EquipmentFilters,
   RequestStatus,
@@ -97,6 +98,14 @@ export const equipmentApi = {
   },
 };
 
+// Users API
+export const usersApi = {
+  getAll: async (): Promise<User[]> => {
+    const response = await api.get('/users');
+    return response.data;
+  },
+};
+
 // Teams API
 export const teamsApi = {
   getAll: async (): Promise<Team[]> => {
@@ -107,6 +116,11 @@ export const teamsApi = {
   getById: async (id: string): Promise<Team> => {
     const response = await api.get(`/teams/${id}`);
     return response.data.data;
+  },
+
+  create: async (data: CreateTeamForm): Promise<Team> => {
+    const response = await api.post('/teams', data);
+    return response.data;
   },
 };
 

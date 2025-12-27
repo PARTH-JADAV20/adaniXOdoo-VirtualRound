@@ -337,16 +337,14 @@ const EquipmentPage: React.FC = () => {
       </Card>
 
       {/* Modals */}
-      {isCreateModalOpen && (
-        <CreateEquipmentModal
-          open={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-          onSuccess={() => {
-            loadEquipment();
-            setIsCreateModalOpen(false);
-          }}
-        />
-      )}
+      <CreateEquipmentModal
+        open={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSuccess={() => {
+          loadEquipment();
+          setIsCreateModalOpen(false);
+        }}
+      />
 
       {selectedEquipment && (
         <EquipmentDetailsModal
