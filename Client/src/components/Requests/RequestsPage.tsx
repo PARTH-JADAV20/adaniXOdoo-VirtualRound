@@ -361,16 +361,14 @@ const RequestsPage: React.FC = () => {
       )}
 
       {/* Modals */}
-      {isCreateModalOpen && (
-        <CreateRequestModal
-          open={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-          onSuccess={() => {
-            loadRequests();
-            setIsCreateModalOpen(false);
-          }}
-        />
-      )}
+      <CreateRequestModal
+        open={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSuccess={() => {
+          loadRequests();
+          setIsCreateModalOpen(false);
+        }}
+      />
 
       {selectedRequest && (
         <RequestDetailsModal
